@@ -1,4 +1,4 @@
---Users
+Users
 -----
 id INT PRIMARY KEY
 username VARCHAR(255)
@@ -7,7 +7,7 @@ email VARCHAR(255)
 role VARCHAR(255)
 created_at DATETIME
 
---Storefronts
+Storefronts
 -----------
 id INT PRIMARY KEY
 name VARCHAR(255)
@@ -21,7 +21,7 @@ name VARCHAR(255)
 user_id INT REFERENCES Users(id)
 created_at DATETIME
 
---Products
+Products
 --------
 id INT PRIMARY KEY
 title VARCHAR(255)
@@ -33,21 +33,21 @@ product_images VARCHAR(255)
 created_at DATETIME
 category_id INT REFERENCES Categories(id)
 
---Categories
+Categories
 ----------
 id INT PRIMARY KEY
 name VARCHAR(255)
 description TEXT
 created_at DATETIME
 
---Catalogs
+Catalogs
 --------
 id INT PRIMARY KEY
 name VARCHAR(255)
 storefront_id INT REFERENCES Storefronts(id)
 created_at DATETIME
 
---CatalogProducts
+CatalogProducts
 ---------------
 id INT PRIMARY KEY
 catalog_id INT REFERENCES Catalogs(id)
