@@ -1,54 +1,57 @@
-Users
------
-id INT PRIMARY KEY
-username VARCHAR(255)
-password VARCHAR(255)
-email VARCHAR(255)
-role VARCHAR(255)
-created_at DATETIME
+// DBML for the SQL table schemas
 
-Storefronts
------------
-id INT PRIMARY KEY
-name VARCHAR(255)
-user_id INT REFERENCES Users(id)
-created_at DATETIME
+Table users {
+  id integer [pk]
+  username varchar(255) [not null]
+  password varchar(255) [not null]
+  email varchar(255) [not null]
+  created_at timestamp [not null] // [default: NOW()]
+}
 
-MicroStores
------------
-id INT PRIMARY KEY
-name VARCHAR(255)
-user_id INT REFERENCES Users(id)
-created_at DATETIME
+Table stores {
+  id integer [pk]
+  user_id integer [ref: > users.id]
+  name varchar(255) [not null]
+  is_microstore boolean [not null] //[default: false]
+  created_at timestamp [not null]// [default: `NOW()`]
+}
 
-Products
---------
-id INT PRIMARY KEY
-title VARCHAR(255)
-description TEXT
-price DECIMAL(10,2)
-available_date DATETIME
-stock_quantity INT
-product_images VARCHAR(255)
-created_at DATETIME
-category_id INT REFERENCES Categories(id)
+Table catalogs {
+  id integer [pk]
+  store_id integer [ref: > stores.id]
+  name varchar(255) [not null]
+  created_at timestamp [not null]// [default: `NOW()`]
+}
 
-Categories
-----------
-id INT PRIMARY KEY
-name VARCHAR(255)
-description TEXT
-created_at DATETIME
+Table products {
+  id integer [pk]
+  name varchar(255) [not null]
+  description text [not null]
+  price decimal(10, 2) [not null]
+  available_date date [not null]
+  stock_quantity integer [not null]
+  image_url text [not null]
+  created_at timestamp [not null]// [default: `NOW()`]
+}
 
-Catalogs
---------
-id INT PRIMARY KEY
-name VARCHAR(255)
-storefront_id INT REFERENCES Storefronts(id)
-created_at DATETIME
+Table product_attributes {
+  id integer [pk]
+  product_id integer [ref: > products.id]
+  title varchar(255) [not null]
+  description text [not null]
+  created_at timestamp [not null]// [default: `NOW()`]
+}
 
-CatalogProducts
----------------
-id INT PRIMARY KEY
-catalog_id INT REFERENCES Catalogs(id)
-product_id INT REFERENCES Products(id)
+Table catalog_products {
+  id integer [pk]
+  catalog_id integer [ref: > catalogs.id]
+  product_id integer [ref: > products.id]
+  created_at timestamp [not null]// [default: `NOW()`]
+}
+
+Table store_products {
+  id integer [pk]
+  store_id integer [ref: > stores.id]
+  product_id integer [ref: > products.id]
+  created_at timestamp [not null] //[default: `NOW()`]
+}
