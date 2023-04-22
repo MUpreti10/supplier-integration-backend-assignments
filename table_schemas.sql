@@ -1,57 +1,69 @@
-// DBML for the SQL table schemas
+CREATE TABLE "users" (
+  "id" integer PRIMARY KEY,
+  "username" varchar(255) NOT NULL,
+  "password" varchar(255) NOT NULL,
+  "email" varchar(255) NOT NULL,
+  "created_at" timestamp NOT NULL
+);
 
-Table users {
-  id integer [pk]
-  username varchar(255) [not null]
-  password varchar(255) [not null]
-  email varchar(255) [not null]
-  created_at timestamp [not null] // [default: NOW()]
-}
+CREATE TABLE "stores" (
+  "id" integer PRIMARY KEY,
+  "user_id" integer,
+  "name" varchar(255) NOT NULL,
+  "is_microstore" boolean NOT NULL,
+  "created_at" timestamp NOT NULL
+);
 
-Table stores {
-  id integer [pk]
-  user_id integer [ref: > users.id]
-  name varchar(255) [not null]
-  is_microstore boolean [not null] //[default: false]
-  created_at timestamp [not null]// [default: `NOW()`]
-}
+CREATE TABLE "catalogs" (
+  "id" integer PRIMARY KEY,
+  "store_id" integer,
+  "name" varchar(255) NOT NULL,
+  "created_at" timestamp NOT NULL
+);
 
-Table catalogs {
-  id integer [pk]
-  store_id integer [ref: > stores.id]
-  name varchar(255) [not null]
-  created_at timestamp [not null]// [default: `NOW()`]
-}
+CREATE TABLE "products" (
+  "id" integer PRIMARY KEY,
+  "name" varchar(255) NOT NULL,
+  "description" text NOT NULL,
+  "price" "decimal(10, 2)" NOT NULL,
+  "available_date" date NOT NULL,
+  "stock_quantity" integer NOT NULL,
+  "image_url" text NOT NULL,
+  "created_at" timestamp NOT NULL
+);
 
-Table products {
-  id integer [pk]
-  name varchar(255) [not null]
-  description text [not null]
-  price decimal(10, 2) [not null]
-  available_date date [not null]
-  stock_quantity integer [not null]
-  image_url text [not null]
-  created_at timestamp [not null]// [default: `NOW()`]
-}
+CREATE TABLE "product_attributes" (
+  "id" integer PRIMARY KEY,
+  "product_id" integer,
+  "title" varchar(255) NOT NULL,
+  "description" text NOT NULL,
+  "created_at" timestamp NOT NULL
+);
 
-Table product_attributes {
-  id integer [pk]
-  product_id integer [ref: > products.id]
-  title varchar(255) [not null]
-  description text [not null]
-  created_at timestamp [not null]// [default: `NOW()`]
-}
+CREATE TABLE "catalog_products" (
+  "id" integer PRIMARY KEY,
+  "catalog_id" integer,
+  "product_id" integer,
+  "created_at" timestamp NOT NULL
+);
 
-Table catalog_products {
-  id integer [pk]
-  catalog_id integer [ref: > catalogs.id]
-  product_id integer [ref: > products.id]
-  created_at timestamp [not null]// [default: `NOW()`]
-}
+CREATE TABLE "store_products" (
+  "id" integer PRIMARY KEY,
+  "store_id" integer,
+  "product_id" integer,
+  "created_at" timestamp NOT NULL
+);
 
-Table store_products {
-  id integer [pk]
-  store_id integer [ref: > stores.id]
-  product_id integer [ref: > products.id]
-  created_at timestamp [not null] //[default: `NOW()`]
-}
+ALTER TABLE "stores" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE "catalogs" ADD FOREIGN KEY ("store_id") REFERENCES "stores" ("id");
+
+ALTER TABLE "product_attributes" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
+ALTER TABLE "catalog_products" ADD FOREIGN KEY ("catalog_id") REFERENCES "catalogs" ("id");
+
+ALTER TABLE "catalog_products" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
+ALTER TABLE "store_products" ADD FOREIGN KEY ("store_id") REFERENCES "stores" ("id");
+
+ALTER TABLE "store_products" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
