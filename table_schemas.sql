@@ -1,4 +1,4 @@
-CREATE TABLE "users" (
+CREATE TABLE IF NOT EXISTS "users" (
   "id" integer PRIMARY KEY,
   "username" varchar(255) NOT NULL,
   "password" varchar(255) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE "users" (
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "stores" (
+CREATE TABLE IF NOT EXISTS "stores" (
   "id" integer PRIMARY KEY,
   "user_id" integer,
   "name" varchar(255) NOT NULL,
@@ -14,14 +14,14 @@ CREATE TABLE "stores" (
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "catalogs" (
+CREATE TABLE IF NOT EXISTS "catalogs" (
   "id" integer PRIMARY KEY,
   "store_id" integer,
   "name" varchar(255) NOT NULL,
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "products" (
+CREATE TABLE IF NOT EXISTS "products" (
   "id" integer PRIMARY KEY,
   "name" varchar(255) NOT NULL,
   "description" text NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE "products" (
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "product_attributes" (
+CREATE TABLE IF NOT EXISTS "product_attributes" (
   "id" integer PRIMARY KEY,
   "product_id" integer,
   "title" varchar(255) NOT NULL,
@@ -40,19 +40,20 @@ CREATE TABLE "product_attributes" (
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "catalog_products" (
+CREATE TABLE IF NOT EXISTS "catalog_products" (
   "id" integer PRIMARY KEY,
   "catalog_id" integer,
   "product_id" integer,
   "created_at" timestamp NOT NULL
 );
 
-CREATE TABLE "store_products" (
+CREATE TABLE IF NOT EXISTS "store_products" (
   "id" integer PRIMARY KEY,
   "store_id" integer,
   "product_id" integer,
   "created_at" timestamp NOT NULL
 );
+
 
 ALTER TABLE "stores" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
